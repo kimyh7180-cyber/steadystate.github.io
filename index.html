@@ -151,19 +151,29 @@
   function aiMove() {
     let bestScore = -Infinity;
     let bestMove = null;
-    for (let i = 0; i < 15; i++) {
-      for (let j = 0; j < 15; j++) {
-        if (gomokuBoard[i][j] === 0) {
-          gomokuBoard[i][j] = 2;
-          let score = evaluateBoard(i, j, 2) - evaluateBoard(i, j, 1) * 0.8;
-          gomokuBoard[i][j] = 0;
-          if (score > bestScore) {
-            bestScore = score;
-            bestMove = [i, j];
-          }
+    let candidateMoves = getAdjacentCells();
+    
+    if (candidateMoves.length === 0) {
+      for (let i = 0; i < 15; i++) {
+        for (let j = 0; j < 15; j++) {
+          if (gomokuBoard[i][j] === 0) candidateMoves.push([i, j]);
         }
       }
     }
+
+    for (let [i, j] of candidateMoves) {
+      gomokuBoard[i][j] = 2;
+      let aiScore = evaluateBoard(i, j, 2);
+      let playerScore = evaluateBoard(i, j, 1);
+      let score = aiScore * 2 - playerScore * 2.5;
+      gomokuBoard[i][j] = 0;
+      
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = [i, j];
+      }
+    }
+
     if (bestMove) {
       gomokuBoard[bestMove[0]][bestMove[1]] = 2;
       renderGomokuBoard();
@@ -177,20 +187,55 @@
     document.getElementById('gameStatus').textContent = '당신의 차례입니다 (흑)';
   }
 
+  function getAdjacentCells() {
+    let adjacent = new Set();
+    for (let i = 0; i < 15; i++) {
+      for (let j = 0; j < 15; j++) {
+        if (gomokuBoard[i][j] !== 0) {
+          for (let di = -2; di <= 2; di++) {
+            for (let dj = -2; dj <= 2; dj++) {
+              let ni = i + di, nj = j + dj;
+              if (ni >= 0 && ni < 15 && nj >= 0 && nj < 15 && gomokuBoard[ni][nj] === 0) {
+                adjacent.add(JSON.stringify([ni, nj]));
+              }
+            }
+          }
+        }
+      }
+    }
+    return Array.from(adjacent).map(s => JSON.parse(s));
+  }
+
   function evaluateBoard(row, col, player) {
     let score = 0;
     const directions = [[0,1], [1,0], [1,1], [1,-1]];
+    
     for (let [dr, dc] of directions) {
       let count = 1;
+      let openEnds = 0;
+      
+      // 한 방향 계산
       for (let i = 1; i < 5; i++) {
         if (gomokuBoard[row+dr*i]?.[col+dc*i] === player) count++;
-        else break;
+        else {
+          if (gomokuBoard[row+dr*i]?.[col+dc*i] === 0) openEnds++;
+          break;
+        }
       }
+      
+      // 반대 방향 계산
       for (let i = 1; i < 5; i++) {
         if (gomokuBoard[row-dr*i]?.[col-dc*i] === player) count++;
-        else break;
+        else {
+          if (gomokuBoard[row-dr*i]?.[col-dc*i] === 0) openEnds++;
+          break;
+        }
       }
-      score += [0, 1, 10, 100, 1000, 10000][Math.min(count, 5)];
+      
+      // 점수 계산 (양끝 열려있으면 더 높은 점수)
+      let baseScore = [0, 1, 10, 100, 1000, 10000][Math.min(count, 5)];
+      let multiplier = openEnds === 2 ? 1.5 : (openEnds === 1 ? 0.8 : 0.3);
+      score += baseScore * multiplier;
     }
     return score;
   }
