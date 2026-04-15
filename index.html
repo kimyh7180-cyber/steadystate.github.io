@@ -79,14 +79,156 @@
   
   footer { padding: 60px 0; text-align: center; font-size: 12px; color: var(--text-gray); background: var(--bg-soft); }
 
+  /* SECTION 6: GAME - GOMOKU */
+  .game-section { background: linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%); color: #fff; }
+  .game-title { text-align: center; color: var(--gold); margin-bottom: 30px; }
+  .game-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .gomoku-board { display: inline-grid; grid-template-columns: repeat(15, 30px); gap: 1px; background: #333; padding: 10px; border-radius: 8px; }
+  .gomoku-cell { width: 30px; height: 30px; background: #8B7355; border: 1px solid #555; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: all 0.2s; }
+  .gomoku-cell:hover { background: #9d8566; box-shadow: inset 0 0 5px rgba(0,0,0,0.3); }
+  .gomoku-cell.black { background: #000; }
+  .gomoku-cell.white { background: #fff; }
+  .game-info { text-align: center; margin-top: 20px; }
+  .game-info p { font-size: 16px; margin: 8px 0; }
+  .game-status { font-size: 18px; font-weight: 600; color: var(--gold); }
+  .game-button { background: var(--gold); color: var(--text-black); border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+  .game-button:hover { transform: scale(1.05); }
+
   @media (max-width: 734px) {
     section { padding: 80px 0; }
     .contact-box { padding: 40px 20px; }
     .contact-email { font-size: 20px; }
+    .gomoku-board { grid-template-columns: repeat(15, 20px); gap: 0; padding: 5px; }
+    .gomoku-cell { width: 20px; height: 20px; font-size: 14px; }
   }
 </style>
 </head>
 <body>
+
+<script>
+  // 오목 게임 로직
+  let gomokuBoard = [];
+  let gameOver = false;
+  let playerTurn = true;
+
+  function initGomokuBoard() {
+    gomokuBoard = Array(15).fill(null).map(() => Array(15).fill(0));
+    gameOver = false;
+    playerTurn = true;
+    renderGomokuBoard();
+    document.getElementById('gameStatus').textContent = '당신의 차례입니다 (흑)';
+  }
+
+  function renderGomokuBoard() {
+    const board = document.getElementById('gomokuBoard');
+    board.innerHTML = '';
+    for (let i = 0; i < 15; i++) {
+      for (let j = 0; j < 15; j++) {
+        const cell = document.createElement('div');
+        cell.className = 'gomoku-cell';
+        if (gomokuBoard[i][j] === 1) cell.classList.add('black');
+        if (gomokuBoard[i][j] === 2) cell.classList.add('white');
+        cell.onclick = () => playerMove(i, j);
+        board.appendChild(cell);
+      }
+    }
+  }
+
+  function playerMove(row, col) {
+    if (gameOver || !playerTurn || gomokuBoard[row][col] !== 0) return;
+    gomokuBoard[row][col] = 1;
+    renderGomokuBoard();
+    if (checkWin(1)) {
+      document.getElementById('gameStatus').textContent = '축하합니다! 당신이 이겼습니다!';
+      gameOver = true;
+      return;
+    }
+    playerTurn = false;
+    document.getElementById('gameStatus').textContent = 'AI의 차례...';
+    setTimeout(aiMove, 500);
+  }
+
+  function aiMove() {
+    let bestScore = -Infinity;
+    let bestMove = null;
+    for (let i = 0; i < 15; i++) {
+      for (let j = 0; j < 15; j++) {
+        if (gomokuBoard[i][j] === 0) {
+          gomokuBoard[i][j] = 2;
+          let score = evaluateBoard(i, j, 2) - evaluateBoard(i, j, 1) * 0.8;
+          gomokuBoard[i][j] = 0;
+          if (score > bestScore) {
+            bestScore = score;
+            bestMove = [i, j];
+          }
+        }
+      }
+    }
+    if (bestMove) {
+      gomokuBoard[bestMove[0]][bestMove[1]] = 2;
+      renderGomokuBoard();
+      if (checkWin(2)) {
+        document.getElementById('gameStatus').textContent = 'AI가 이겼습니다!';
+        gameOver = true;
+        return;
+      }
+    }
+    playerTurn = true;
+    document.getElementById('gameStatus').textContent = '당신의 차례입니다 (흑)';
+  }
+
+  function evaluateBoard(row, col, player) {
+    let score = 0;
+    const directions = [[0,1], [1,0], [1,1], [1,-1]];
+    for (let [dr, dc] of directions) {
+      let count = 1;
+      for (let i = 1; i < 5; i++) {
+        if (gomokuBoard[row+dr*i]?.[col+dc*i] === player) count++;
+        else break;
+      }
+      for (let i = 1; i < 5; i++) {
+        if (gomokuBoard[row-dr*i]?.[col-dc*i] === player) count++;
+        else break;
+      }
+      score += [0, 1, 10, 100, 1000, 10000][Math.min(count, 5)];
+    }
+    return score;
+  }
+
+  function checkWin(player) {
+    for (let i = 0; i < 15; i++) {
+      for (let j = 0; j < 15; j++) {
+        if (gomokuBoard[i][j] === player) {
+          if (checkDirection(i, j, player, 0, 1) || checkDirection(i, j, player, 1, 0) || 
+              checkDirection(i, j, player, 1, 1) || checkDirection(i, j, player, 1, -1)) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  function checkDirection(row, col, player, dr, dc) {
+    let count = 1;
+    for (let i = 1; i < 5; i++) {
+      if (gomokuBoard[row+dr*i]?.[col+dc*i] === player) count++;
+      else break;
+    }
+    for (let i = 1; i < 5; i++) {
+      if (gomokuBoard[row-dr*i]?.[col-dc*i] === player) count++;
+      else break;
+    }
+    return count >= 5;
+  }
+
+  function resetGomokuGame() {
+    initGomokuBoard();
+  }
+
+  // 페이지 로드 시 게임 초기화
+  window.addEventListener('DOMContentLoaded', initGomokuBoard);
+</script>
 
 <nav>
   <div class="nav-inner">
@@ -96,6 +238,7 @@
       <li><a href="#academic">학력</a></li>
       <li><a href="#research">연구</a></li>
       <li><a href="#teaching">강의</a></li>
+      <li><a href="#game">게임</a></li>
       <li><a href="#contact">연락처</a></li>
     </ul>
   </div>
@@ -195,7 +338,22 @@
   </div>
 </section>
 
-<!-- 5. CONTACT -->
+<!-- 5. GOMOKU GAME -->
+<section id="game" class="game-section">
+  <div class="inner">
+    <h2 class="game-title">오목 게임 - AI와 대전</h2>
+    <p style="text-align: center; opacity: 0.8; margin-bottom: 20px;">인공지능과 오목 게임을 해보세요! (흑=당신, 백=AI)</p>
+    <div class="game-container">
+      <div class="gomoku-board" id="gomokuBoard"></div>
+      <div class="game-info">
+        <p class="game-status" id="gameStatus">당신의 차례입니다 (흑)</p>
+        <button class="game-button" onclick="resetGomokuGame()">새 게임</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. CONTACT -->
 <section id="contact">
   <div class="inner">
     <div class="contact-box">
