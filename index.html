@@ -43,7 +43,7 @@
   /* SECTION 1: INTRODUCTION */
   .hero { text-align: center; background: var(--bg-white); }
   .hero-h1 { font-size: clamp(40px, 8vw, 80px); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
-  .hero-h1 span { display: block; background: linear-gradient(180deg, #1d1d1f 0%, #86868b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-h1 span { display: block; background: linear-gradient(180deg, #1d1d1f 0%, #86868b 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .hero-tagline { font-size: 24px; font-weight: 500; margin-top: 25px; color: var(--text-gray); }
 
   /* SECTION 2: ACADEMIC */
@@ -68,6 +68,13 @@
   .contact-box { background: var(--text-black); color: #fff; padding: 60px; border-radius: 30px; text-align: center; }
   .contact-email { font-size: 28px; font-weight: 700; margin: 20px 0; display: block; color: #fff; text-decoration: none; }
   .contact-email:hover { text-decoration: underline; }
+  .contact-form { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
+  .contact-form input, .contact-form textarea { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 12px 16px; border-radius: 8px; font-family: 'Noto Sans KR', sans-serif; font-size: 14px; }
+  .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,0.6); }
+  .contact-form input:focus, .contact-form textarea:focus { outline: none; background: rgba(255,255,255,0.15); border-color: var(--gold); }
+  .contact-form textarea { resize: vertical; min-height: 120px; }
+  .contact-form button { background: var(--gold); color: var(--text-black); border: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+  .contact-form button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(212,175,55,0.3); }
   
   footer { padding: 60px 0; text-align: center; font-size: 12px; color: var(--text-gray); background: var(--bg-soft); }
 
@@ -96,12 +103,12 @@
 <!-- 1. INTRODUCTION -->
 <section class="hero" id="intro">
   <div class="inner">
-    <span class="section-label">The Ultimate Standard</span>
-    <h1 class="hero-h1">김영훈.<span>모든 한계를 넘어서다.</span></h1>
-    <p class="hero-tagline">이론과 실천을 겸비한 공학도이자, 다학제적 통찰로 세상을 설계하는 혁신가입니다.</p>
+    <span class="section-label">About Me</span>
+    <h1 class="hero-h1">김영훈.<span>공학과 교육의 경계를 넘다</span></h1>
+    <p class="hero-tagline">공학 교육과 연구를 통해 실질적인 가치를 만드는 엔지니어입니다.</p>
     <p class="content-text" style="margin-top: 40px; color: var(--text-gray);">
-      깊이 있는 연구를 바탕으로, 기술이 인류의 삶에 녹아드는 방식을 탐구합니다. 
-      이론적 지식을 넘어, 실무 중심의 교육과 연구를 통해 복잡한 공학적 난제들을 해결해 나갑니다.
+      광통신, 반도체, 인공지능 등 다양한 분야에서 깊이 있는 연구를 수행하며, 
+      그 지식을 학생들에게 전달하는 교육자로서 활동하고 있습니다.
     </p>
   </div>
 </section>
@@ -192,9 +199,14 @@
     <div class="contact-box">
       <span class="section-label" style="color: var(--gold);">Let's Connect</span>
       <h2 style="font-size: 36px; margin-bottom: 10px;">함께 미래를 설계하시겠습니까?</h2>
-      <p style="opacity: 0.7;">새로운 프로젝트, 연구 협력, 혹은 제안이 있다면 언제든 환영합니다.</p>
-      <a href="mailto:contact@steadystate.github.io" class="contact-email">contact@steadystate.github.io</a>
-      <p style="font-size: 14px; opacity: 0.5;">서울특별시 강남구 테헤란로 (글로벌 본부)</p>
+      <p style="opacity: 0.7; margin-bottom: 30px;">새로운 프로젝트, 연구 협력, 혹은 제안이 있다면 언제든 환영합니다.</p>
+      <form action="https://formsubmit.co/kimyh7180@gmail.com" method="POST" class="contact-form">
+        <input type="text" name="name" placeholder="이름" required>
+        <input type="email" name="email" placeholder="이메일" required>
+        <textarea name="message" placeholder="메시지를 입력해주세요" required></textarea>
+        <button type="submit">메시지 전송</button>
+      </form>
+      <p style="font-size: 12px; margin-top: 20px; opacity: 0.5;">또는 직접 연락: kimyh7180@gmail.com</p>
     </div>
   </div>
 </section>
