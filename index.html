@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KIM YOUNG HOON | The Ultimate Standard</title>
+<title>KIM YOUNG HOON | Official Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg-white: #ffffff;
+    --bg-soft: #f5f5f7;
     --text-black: #1d1d1f;
     --text-gray: #86868b;
     --accent-blue: #0066cc;
@@ -15,49 +16,65 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body { 
     background: var(--bg-white); 
     color: var(--text-black); 
     font-family: 'Noto Sans KR', sans-serif; 
     -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
   }
 
   /* NAV */
   nav { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); z-index: 100; height: 48px; border-bottom: 1px solid #f2f2f2; }
   .nav-inner { max-width: 1024px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 100%; padding: 0 22px; }
   .nav-links { display: flex; gap: 30px; list-style: none; }
-  .nav-links a { color: var(--text-black); text-decoration: none; font-size: 12px; font-weight: 400; opacity: 0.8; }
+  .nav-links a { color: var(--text-black); text-decoration: none; font-size: 12px; font-weight: 400; opacity: 0.8; transition: opacity 0.2s; }
+  .nav-links a:hover { opacity: 1; }
+  .logo { font-weight: 900; font-size: 20px; cursor: pointer; text-decoration: none; color: var(--text-black); }
 
-  /* HERO */
-  .hero { padding: 120px 0 60px; text-align: center; }
-  .hero-label { font-size: 21px; font-weight: 600; color: var(--gold); margin-bottom: 10px; }
-  .hero-h1 { font-size: clamp(40px, 8vw, 80px); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; }
+  /* COMMON SECTION STYLE */
+  section { padding: 120px 0; border-bottom: 1px solid #f2f2f2; scroll-margin-top: 48px; }
+  .inner { max-width: 800px; margin: 0 auto; padding: 0 22px; }
+  .section-label { font-size: 14px; font-weight: 600; color: var(--gold); text-transform: uppercase; margin-bottom: 15px; display: block; }
+  .section-title { font-size: clamp(32px, 5vw, 48px); font-weight: 700; line-height: 1.2; margin-bottom: 30px; }
+  .content-text { font-size: 18px; color: var(--text-black); opacity: 0.9; }
+
+  /* SECTION 1: INTRODUCTION */
+  .hero { text-align: center; background: var(--bg-white); }
+  .hero-h1 { font-size: clamp(40px, 8vw, 80px); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
   .hero-h1 span { display: block; background: linear-gradient(180deg, #1d1d1f 0%, #86868b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .hero-tagline { font-size: 24px; font-weight: 500; margin-top: 20px; color: var(--text-gray); }
+  .hero-tagline { font-size: 24px; font-weight: 500; margin-top: 25px; color: var(--text-gray); }
 
-  /* SPEC GRID */
-  .grid-section { background: #f5f5f7; padding: 100px 0; }
-  .inner { max-width: 1000px; margin: 0 auto; padding: 0 22px; }
-  .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .card { 
-    background: #fff; border-radius: 30px; padding: 40px; 
-    display: flex; flex-direction: column; justify-content: space-between;
-    height: 450px; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .card:hover { transform: scale(1.01); }
-  .card-title { font-size: 32px; font-weight: 700; margin-top: 10px; }
-  .card-desc { font-size: 18px; color: var(--text-gray); margin-top: 10px; line-height: 1.4; }
-  .card-footer { margin-top: auto; font-size: 17px; color: var(--accent-blue); font-weight: 500; }
+  /* SECTION 2: ACADEMIC */
+  .academic-item { margin-bottom: 40px; }
+  .academic-year { font-weight: 600; color: var(--accent-blue); font-size: 16px; margin-bottom: 5px; }
+  .academic-title { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+  .academic-desc { color: var(--text-gray); font-size: 16px; }
 
-  /* BENTO STYLE SPECIAL */
-  .bento-full { grid-column: 1 / span 2; height: 350px !important; text-align: center; }
+  /* SECTION 3: RESEARCH */
+  .research-list { list-style: none; }
+  .research-card { background: var(--bg-soft); border-radius: 20px; padding: 30px; margin-bottom: 20px; transition: transform 0.3s ease; }
+  .research-card:hover { transform: translateY(-5px); }
+  .research-card h3 { font-size: 20px; margin-bottom: 10px; color: var(--text-black); }
+  .research-card p { font-size: 16px; color: var(--text-gray); }
 
-  footer { padding: 60px 0; text-align: center; font-size: 12px; color: var(--text-gray); }
+  /* SECTION 4: CERTIFICATIONS */
+  .certs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+  .cert-item { background: #fff; border: 1px solid #e5e5e7; padding: 15px 20px; border-radius: 12px; font-size: 15px; font-weight: 500; display: flex; align-items: center; }
+  .cert-item::before { content: "✓"; color: var(--gold); margin-right: 10px; font-weight: 900; }
+
+  /* SECTION 5: CONTACT */
+  .contact-box { background: var(--text-black); color: #fff; padding: 60px; border-radius: 30px; text-align: center; }
+  .contact-email { font-size: 28px; font-weight: 700; margin: 20px 0; display: block; color: #fff; text-decoration: none; }
+  .contact-email:hover { text-decoration: underline; }
+  
+  footer { padding: 60px 0; text-align: center; font-size: 12px; color: var(--text-gray); background: var(--bg-soft); }
 
   @media (max-width: 734px) {
-    .card-grid { grid-template-columns: 1fr; }
-    .bento-full { grid-column: 1; }
-    .hero-h1 { font-size: 48px; }
+    section { padding: 80px 0; }
+    .contact-box { padding: 40px 20px; }
+    .contact-email { font-size: 20px; }
   }
 </style>
 </head>
@@ -65,80 +82,113 @@
 
 <nav>
   <div class="nav-inner">
-    <div style="font-weight: 900; font-size: 20px;">KYH</div>
+    <a href="#intro" class="logo">KYH</a>
     <ul class="nav-links">
-      <li><a href="#">Overview</a></li>
-      <li><a href="#">Academic</a></li>
-      <li><a href="#">Skills</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="#intro">소개</a></li>
+      <li><a href="#academic">학력</a></li>
+      <li><a href="#research">연구</a></li>
+      <li><a href="#certs">자격</a></li>
+      <li><a href="#contact">연락처</a></li>
     </ul>
-    <div style="font-size: 12px; border: 1px solid #1d1d1f; padding: 4px 10px; border-radius: 20px;">Contact</div>
   </div>
 </nav>
 
-<section class="hero">
+<!-- 1. INTRODUCTION -->
+<section class="hero" id="intro">
   <div class="inner">
-    <p class="hero-label">The Icon of Excellence</p>
+    <span class="section-label">The Ultimate Standard</span>
     <h1 class="hero-h1">김영훈.<span>모든 한계를 넘어서다.</span></h1>
-    <p class="hero-tagline">하버드 공학 박사 | 200개 이상의 전문 자격 | 다국어 마스터</p>
+    <p class="hero-tagline">이론과 실천을 겸비한 공학도이자, 다학제적 통찰로 세상을 설계하는 혁신가입니다.</p>
+    <p class="content-text" style="margin-top: 40px; color: var(--text-gray);">
+      하버드에서의 깊이 있는 연구를 바탕으로, 기술이 인류의 삶에 녹아드는 방식을 탐구합니다. 
+      단순한 지식의 습득을 넘어, 200여 개의 전문 자격을 통해 증명된 압도적인 실행력으로 복잡한 난제들을 해결해 나갑니다.
+    </p>
   </div>
 </section>
 
-<section class="grid-section">
+<!-- 2. ACADEMIC BACKGROUND -->
+<section id="academic">
   <div class="inner">
-    <div class="card-grid">
-      <div class="card">
-        <div>
-          <p style="font-size:14px; font-weight:600;">Academic Master</p>
-          <h3 class="card-title">하버드 전자공학 박사.</h3>
-          <p class="card-desc">이론을 넘어선 실천적 공학의 정점. 나노 소자부터 양자 컴퓨팅까지, 기술의 미래를 직접 설계합니다.</p>
-        </div>
-        <div class="card-footer">연구 성과 확인하기 ></div>
+    <span class="section-label">Education</span>
+    <h2 class="section-title">학력 사항.</h2>
+    
+    <div class="academic-item">
+      <p class="academic-year">Present</p>
+      <h3 class="academic-title">하버드 대학교 (Harvard University)</h3>
+      <p class="academic-desc">전자공학 박사 (Ph.D. in Electrical Engineering)</p>
+    </div>
+
+    <div class="academic-item">
+      <p class="academic-year">Graduate</p>
+      <h3 class="academic-title">주요 학위 및 연구 과정</h3>
+      <p class="academic-desc">나노 소자 및 양자 컴퓨팅 아키텍처 집중 연구. 다수의 국제 학술지 논문 게재.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. RESEARCH INTERESTS -->
+<section id="research" style="background: var(--bg-soft);">
+  <div class="inner">
+    <span class="section-label">Research</span>
+    <h2 class="section-title">관심 연구 분야.</h2>
+    
+    <div class="research-list">
+      <div class="research-card">
+        <h3>양자 컴퓨팅 및 알고리즘</h3>
+        <p>복잡한 연산 문제를 해결하기 위한 차세대 양자 프로세서 설계 및 효율적인 양자 알고리즘 최적화 연구에 집중하고 있습니다.</p>
+      </div>
+      
+      <div class="research-card">
+        <h3>인공지능 기반 시스템 설계</h3>
+        <p>딥러닝과 강화학습을 하드웨어 설계 프로세스에 도입하여, 스스로 성능을 최적화하는 지능형 시스템 구축을 탐구합니다.</p>
       </div>
 
-      <div class="card">
-        <div>
-          <p style="font-size:14px; font-weight:600;">Linguistic Genius</p>
-          <h3 class="card-title">모든 언어로 소통하다.</h3>
-          <p class="card-desc">전 세계 모든 언어를 네이티브 수준으로 구사하며, 문화적 경계를 허무는 글로벌 리더십을 발휘합니다.</p>
-        </div>
-        <div class="card-footer">지원 언어 리스트 ></div>
+      <div class="research-card">
+        <h3>나노 기술 기반 지속 가능한 에너지</h3>
+        <p>나노 스케일의 소자 설계를 통해 에너지 효율을 극대화하고, 친환경적인 차세대 에너지 저장 장치를 개발하는 데 관심을 두고 있습니다.</p>
       </div>
+    </div>
+  </div>
+</section>
 
-      <div class="card bento-full">
-        <div>
-          <p style="font-size:14px; font-weight:600; color:var(--gold);">Unrivaled Expertise</p>
-          <h3 class="card-title" style="font-size: 42px;">200+ 자격증의 압도적 전문성.</h3>
-          <p class="card-desc">금융, 기술, 예술, 법률을 아우르는 방대한 지식 체계.<br>분야를 가리지 않는 완벽한 문제 해결 능력을 증명합니다.</p>
-        </div>
-        <div class="card-footer" style="margin-top: 30px;">자격증 카탈로그 보기 ></div>
-      </div>
+<!-- 4. CERTIFICATIONS -->
+<section id="certs">
+  <div class="inner">
+    <span class="section-label">Expertise</span>
+    <h2 class="section-title">200+ 전문 자격.</h2>
+    <p class="content-text" style="margin-bottom: 40px; color: var(--text-gray);">금융, 기술, 법률, 예술 등 다양한 분야를 아우르는 전문성을 객관적 지표로 증명해 왔습니다.</p>
+    
+    <div class="certs-grid">
+      <div class="cert-item">정보처리기사 (상위 0.1%)</div>
+      <div class="cert-item">금융투자분석사 (CFA Level 2)</div>
+      <div class="cert-item">국제 공인 전문 자격 150종</div>
+      <div class="cert-item">다국어 마스터 (8개 국어)</div>
+      <div class="cert-item">고급 데이터 사이언티스트</div>
+      <div class="cert-item">프로젝트 관리 전문가 (PMP)</div>
+      <div class="cert-item">전략 경영 컨설턴트 자격</div>
+      <div class="cert-item">기술 가치 평가사</div>
+    </div>
+    <p style="margin-top: 30px; font-size: 14px; color: var(--text-gray);">* 이외 200여 개의 세부 전문 자격 보유 중</p>
+  </div>
+</section>
 
-      <div class="card">
-        <div>
-          <p style="font-size:14px; font-weight:600;">Artistic Soul</p>
-          <h3 class="card-title">원빈의 깊이를 담은 연기.</h3>
-          <p class="card-desc">이성을 다루는 공학도의 머리와, 감성을 울리는 예술가의 심장을 동시에 소유했습니다.</p>
-        </div>
-        <div class="card-footer">필모그래피 ></div>
-      </div>
-
-      <div class="card">
-        <div>
-          <p style="font-size:14px; font-weight:600;">Economic Power</p>
-          <h3 class="card-title">상상을 현실로 만드는 자본.</h3>
-          <p class="card-desc">세상을 바꾸는 프로젝트에 아낌없이 투자하며, 자본의 가치를 인류의 진보로 연결합니다.</p>
-        </div>
-        <div class="card-footer">투자 철학 ></div>
-      </div>
+<!-- 5. CONTACT -->
+<section id="contact">
+  <div class="inner">
+    <div class="contact-box">
+      <span class="section-label" style="color: var(--gold);">Let's Connect</span>
+      <h2 style="font-size: 36px; margin-bottom: 10px;">함께 미래를 설계하시겠습니까?</h2>
+      <p style="opacity: 0.7;">새로운 프로젝트, 연구 협력, 혹은 제안이 있다면 언제든 환영합니다.</p>
+      <a href="mailto:contact@steadystate.github.io" class="contact-email">contact@steadystate.github.io</a>
+      <p style="font-size: 14px; opacity: 0.5;">서울특별시 강남구 테헤란로 (글로벌 본부)</p>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="inner">
-    <p>본 포트폴리오는 전 세계 최고의 표준을 지향하는 김영훈 님의 공식 프로필입니다.</p>
-    <p style="margin-top: 10px; opacity: 0.5;">© 2026 KIM YOUNG HOON. All rights reserved.</p>
+    <p>© 2026 KIM YOUNG HOON. All rights reserved.</p>
+    <p style="margin-top: 5px; opacity: 0.5;">The Ultimate Standard in Engineering & Leadership</p>
   </div>
 </footer>
 
